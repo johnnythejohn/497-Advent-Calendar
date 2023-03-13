@@ -7,7 +7,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'CalendarWeek Example',
+        title: 'Ann Arbor Advent',
         home: HomePage(),
       );
 }
@@ -16,7 +16,15 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
-
+const List<String> Activities = [
+  'Build a Snowman in the Diag!',
+  'Spin the Cube!',
+  'Explore the Nichols Arboretum!',
+  'Visit the Law Library',
+  'Visit the Museum of Natural History',
+  'Have a sandwich at Zingermans',
+  'Visit the UMMA!'
+];
 class _HomePageState extends State<HomePage> {
   final CalendarWeekController _controller = CalendarWeekController();
 
@@ -32,7 +40,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.blue,
-          title: Text('CalendarWeek'),
+          title: Text('Ann Arbor Advent'),
         ),
         body: Column(children: [
           Container(
@@ -96,9 +104,12 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: Center(
               child: Text(
-                '${_controller.selectedDate.day}/${_controller.selectedDate.month}/${_controller.selectedDate.year}',
+                '${_controller.selectedDate.day}/${_controller.selectedDate.month}/${_controller.selectedDate.year}' + "\n\n"
+                + '${Activities[_controller.selectedDate.day % 7]}' ,
                 style: TextStyle(fontSize: 30),
+                textAlign: TextAlign.center,
               ),
+
             ),
           )
         ]),

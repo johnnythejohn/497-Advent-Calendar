@@ -54,7 +54,7 @@ Example:
                 ],
               )
 */
-
+  
   /// Today date time
   DateTime _today = DateTime.now();
 
@@ -335,6 +335,7 @@ class _CalendarWeekState extends State<CalendarWeek> {
       color: widget.backgroundColor,
       width: double.infinity,
       height: widget.height,
+      
       child: ScrollConfiguration(
         behavior: CustomScrollBehavior(),
         child: PageView.builder(
@@ -345,7 +346,8 @@ class _CalendarWeekState extends State<CalendarWeek> {
             widget.onWeekChanged();
           },
           itemBuilder: (_, i) => _week(controller._weeks[i]),
-        ),
+        )
+          
       ));
 
   /// Layout of week
@@ -414,6 +416,7 @@ class _CalendarWeekState extends State<CalendarWeek> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: dates.map(_dateItem).toList());
 
+  
   /// Date item layout
   Widget _dateItem(DateTime? date) => DateItem(
       today: controller._today,
@@ -459,7 +462,7 @@ class _CalendarWeekState extends State<CalendarWeek> {
         return null;
       }(),
       cacheStream: _cacheStream);
-
+  
   @override
   void dispose() {
     super.dispose();
