@@ -1,14 +1,18 @@
+import 'package:example/activity_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_week/flutter_calendar_week.dart';
 import 'package:intl/intl.dart';
+import 'login_page.dart';
+import 'activity_page.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Ann Arbor Advent',
-        home: HomePage(),
+        home: LoginPage(),
       );
 }
 
@@ -16,6 +20,7 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
+
 const List<String> Activities = [
   'Build a Snowman in the Diag!',
   'Spin the Cube!',
@@ -25,8 +30,17 @@ const List<String> Activities = [
   'Have a sandwich at Zingermans',
   'Visit the UMMA!'
 ];
+
 class _HomePageState extends State<HomePage> {
   final CalendarWeekController _controller = CalendarWeekController();
+  DateTime? selectedDate;
+  Map<String, String> completedActivities = {};
+
+  void updateCompletedActivities(String activity) {
+    setState(() {
+      completedActivities[activity] = 'Completed!';
+    });
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -62,7 +76,9 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onDatePressed: (DateTime datetime) {
                   // Do something
-                  setState(() {});
+                  setState(() {
+                    selectedDate = datetime;
+                  });
                 },
                 onDateLongPressed: (DateTime datetime) {
                   // Do something
@@ -103,14 +119,42 @@ class _HomePageState extends State<HomePage> {
               )),
           Expanded(
             child: Center(
-              child: Text(
-                '${_controller.selectedDate.day}/${_controller.selectedDate.month}/${_controller.selectedDate.year}' + "\n\n"
-                + '${Activities[_controller.selectedDate.day % 7]}' ,
-                style: TextStyle(fontSize: 30),
+                child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ActivityPage(
+                      activity: Activities[_controller.selectedDate.day % 7],
+                      onActivityCompleted: updateCompletedActivities,
+                    ),
+                  ),
+                );
+              },
+              child: RichText(
                 textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text:
+                          '${_controller.selectedDate.day}/${_controller.selectedDate.month}/${_controller.selectedDate.year}' +
+                              "\n\n" +
+                              '${Activities[_controller.selectedDate.day % 7]}' +
+                              "\n\n",
+                      style: TextStyle(fontSize: 30, color: Colors.black),
+                    ),
+                    TextSpan(
+                      text:
+                          '${completedActivities[Activities[_controller.selectedDate.day % 7]] ?? ""}',
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-
-            ),
+            )),
           )
         ]),
       );
